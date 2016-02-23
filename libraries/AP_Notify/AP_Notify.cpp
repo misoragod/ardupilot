@@ -175,6 +175,8 @@ void AP_Notify::init(bool enable_external_leds)
         _devices[0] = new DiscoLED();
         _devices[1] = new ToneAlarm_Linux();
 
+    #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_YATAGARASU
+        _devices[0] = new AP_BoardLED();
     #else
         _devices[0] = new AP_BoardLED();
         _devices[1] = new ToshibaLED_I2C();

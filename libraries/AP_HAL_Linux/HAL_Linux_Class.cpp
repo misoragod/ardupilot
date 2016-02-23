@@ -27,6 +27,7 @@
 #include "RCInput_RPI.h"
 #include "RCInput_Raspilot.h"
 #include "RCInput_SBUS.h"
+#include "RCInput_XBUS.h"
 #include "RCInput_UART.h"
 #include "RCInput_UDP.h"
 #include "RCInput_115200.h"
@@ -129,7 +130,8 @@ static GPIO_RPI gpioDriver;
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_MINLURE || \
       CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BEBOP || \
       CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_DISCO || \
-      CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_AERO
+      CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_AERO || \
+      CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_YATAGARASU
 static GPIO_Sysfs gpioDriver;
 #else
 static Empty::GPIO gpioDriver;
@@ -166,6 +168,8 @@ static RCInput_Multi rcinDriver{2, new RCInput_SBUS, new RCInput_115200("/dev/ua
 static RCInput_SBUS rcinDriver;
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_NAVIO2
 static RCInput_Navio2 rcinDriver;
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_YATAGARASU
+static RCInput_XBUS rcinDriver("/dev/ttyAMA2");
 #else
 static RCInput rcinDriver;
 #endif
@@ -218,6 +222,8 @@ static RCOutput_Disco rcoutDriver(i2c_mgr_instance.get_device(HAL_RCOUT_DISCO_BL
 static RCOutput_Sysfs rcoutDriver(0, 0, 14);
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_AERO
 static RCOutput_AeroIO rcoutDriver;
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_YATAGARASU
+static RCOutput_PCA9685 rcoutDriver(i2c_mgr_instance.get_device(0, PCA9685_PRIMARY_ADDRESS), false, 0, YATAGARASU_GPIO_E);
 #else
 static Empty::RCOutput rcoutDriver;
 #endif
