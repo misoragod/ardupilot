@@ -86,6 +86,10 @@ qflight: HAL_BOARD = HAL_BOARD_LINUX
 qflight: TOOLCHAIN = QFLIGHT
 qflight: all
 
+yatagarasu: HAL_BOARD = HAL_BOARD_LINUX
+yatagarasu: TOOLCHAIN = NATIVE
+yatagarasu: all
+
 empty: HAL_BOARD = HAL_BOARD_EMPTY
 empty: TOOLCHAIN = AVR
 empty: all
@@ -110,7 +114,7 @@ qurt: all
 
 # cope with copter and hil targets
 FRAMES = heli
-BOARDS = apm1 apm2 apm2beta apm1-1280 px4-v1 px4-v2 px4-v3 px4-v4 sitl flymaple linux erle pxf navio navio2 raspilot bbbmini minlure erlebrain2 bhat qflight pxfmini
+BOARDS = apm1 apm2 apm2beta apm1-1280 px4-v1 px4-v2 px4-v3 px4-v4 sitl flymaple linux erle pxf navio navio2 raspilot bbbmini minlure erlebrain2 bhat qflight pxfmini yatagarasu
 BOARDS += vrbrain
 BOARDS += vrbrain-v51 vrbrain-v52 vrbrain-v54
 BOARDS += vrcore-v10

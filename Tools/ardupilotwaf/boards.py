@@ -443,6 +443,14 @@ class aero(linux):
             CONFIG_HAL_BOARD_SUBTYPE = 'HAL_BOARD_SUBTYPE_LINUX_AERO',
         )
 
+class yatagarasu(linux):
+    def configure_env(self, cfg, env):
+        super(yatagarasu, self).configure_env(cfg, env)
+
+        env.DEFINES.update(
+            CONFIG_HAL_BOARD_SUBTYPE = 'HAL_BOARD_SUBTYPE_LINUX_YATAGARASU',
+        )
+
 class px4(Board):
     abstract = True
     toolchain = 'arm-none-eabi'
