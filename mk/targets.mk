@@ -23,6 +23,10 @@ qurt: HAL_BOARD = HAL_BOARD_QURT
 qurt: TOOLCHAIN = QURT
 qurt: all
 
+yatagarasu: HAL_BOARD = HAL_BOARD_LINUX
+yatagarasu: TOOLCHAIN = NATIVE
+yatagarasu: all
+
 # cope with HIL targets
 %-hil: EXTRAFLAGS += "-DHIL_MODE=HIL_MODE_SENSORS "
 %-hilsensors: EXTRAFLAGS += "-DHIL_MODE=HIL_MODE_SENSORS "
@@ -39,7 +43,7 @@ qurt: all
 
 # cope with copter and hil targets
 FRAMES = heli
-BOARDS = apm1 apm2 apm2beta apm1-1280 px4-v1 px4-v2 px4-v3 px4-v4 px4-v4pro sitl flymaple
+BOARDS = apm1 apm2 apm2beta apm1-1280 px4-v1 px4-v2 px4-v3 px4-v4 px4-v4pro sitl flymaple yatagarasu
 BOARDS += vrbrain
 BOARDS += vrbrain-v51 vrbrain-v52 vrbrain-v54
 BOARDS += vrcore-v10
