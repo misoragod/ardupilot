@@ -13,6 +13,7 @@
 #include "AP_InertialSensor.h"
 #include "AP_InertialSensor_BMI160.h"
 #include "AP_InertialSensor_Backend.h"
+#include "AP_InertialSensor_hachidori.h"
 #include "AP_InertialSensor_HIL.h"
 #include "AP_InertialSensor_L3G4200D.h"
 #include "AP_InertialSensor_LSM9DS0.h"
@@ -802,6 +803,8 @@ AP_InertialSensor::detect_backends(void)
     _add_backend(AP_InertialSensor_QFLIGHT::detect(*this));
 #elif HAL_INS_DEFAULT == HAL_INS_QURT
     _add_backend(AP_InertialSensor_QURT::detect(*this));
+#elif HAL_INS_DEFAULT == HAL_INS_HACHIDORI
+    _add_backend(AP_InertialSensor_HACHIDORI::detect(*this));
 #elif HAL_INS_DEFAULT == HAL_INS_BBBMINI
     AP_InertialSensor_Backend *backend = AP_InertialSensor_Invensense::probe(*this, hal.spi->get_device(HAL_INS_MPU9250_NAME));
     if (backend) {

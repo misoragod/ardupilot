@@ -15,6 +15,7 @@
 
 #include "AnalogIn_ADS1115.h"
 #include "AnalogIn_IIO.h"
+#include "AnalogIn_hachidori.h"
 #include "AnalogIn_Navio2.h"
 #include "GPIO.h"
 #include "I2CDevice.h"
@@ -22,6 +23,7 @@
 #include "RCInput.h"
 #include "RCInput_AioPRU.h"
 #include "RCInput_DSM.h"
+#include "RCInput_JS.h"
 #include "RCInput_Navio2.h"
 #include "RCInput_PRU.h"
 #include "RCInput_RPI.h"
@@ -29,12 +31,14 @@
 #include "RCInput_SoloLink.h"
 #include "RCInput_UART.h"
 #include "RCInput_UDP.h"
+#include "RCInput_XBUS.h"
 #include "RCInput_115200.h"
 #include "RCInput_Multi.h"
 #include "RCInput_ZYNQ.h"
 #include "RCOutput_AioPRU.h"
 #include "RCOutput_Bebop.h"
 #include "RCOutput_Disco.h"
+#include "RCOutput_hachidori.h"
 #include "RCOutput_PCA9685.h"
 #include "RCOutput_PRU.h"
 #include "RCOutput_Sysfs.h"
@@ -44,6 +48,7 @@
 #include "Scheduler.h"
 #include "Storage.h"
 #include "UARTDriver.h"
+#include "UARTDriver_hachidori.h"
 #include "Util.h"
 #include "Util_RPI.h"
 
@@ -75,6 +80,8 @@ static SPIDeviceManager spi_mgr_instance;
     CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_NAVIO2 || \
     CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_BH
 static SPIUARTDriver uartBDriver;
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_HACHIDORI
+static UARTDriver_HACHIDORI uartBDriver;
 #else
 static UARTDriver uartBDriver(false);
 #endif
@@ -93,6 +100,8 @@ static AnalogIn_IIO analogIn;
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_NAVIO2 || \
       CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_EDGE
 static AnalogIn_Navio2 analogIn;
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_HACHIDORI
+static AnalogIn_HACHIDORI analogIn;
 #else
 static Empty::AnalogIn analogIn;
 #endif
@@ -162,6 +171,8 @@ static RCInput_SoloLink rcinDriver;
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_NAVIO2 || \
       CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_EDGE
 static RCInput_Navio2 rcinDriver;
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_HACHIDORI
+static RCInput_JS rcinDriver("/dev/input/js0");
 #else
 static RCInput rcinDriver;
 #endif
@@ -212,6 +223,8 @@ static RCOutput_Sysfs rcoutDriver(0, 0, 14);
 static ap::RCOutput_Tap rcoutDriver;
 #elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_EDGE
 static RCOutput_Sysfs rcoutDriver(0, 0, 15);
+#elif CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_HACHIDORI
+static RCOutput_HACHIDORI rcoutDriver;
 #else
 static Empty::RCOutput rcoutDriver;
 #endif

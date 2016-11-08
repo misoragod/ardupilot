@@ -39,8 +39,6 @@ extern "C" {
     int tcflush(int fd, int optional_actions);
 }
 
-static const AP_HAL::HAL& hal = AP_HAL::get_HAL();
-
 using namespace Linux;
 
 // xbus frame input state

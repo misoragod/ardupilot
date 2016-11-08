@@ -75,6 +75,12 @@
  # define AP_BATT2_VOLTDIVIDER_DEFAULT       18.62
  # define AP_BATT2_CURR_AMP_PERVOLT_DEFAULT  62.98f
 
+#elif CONFIG_HAL_BOARD == HAL_BOARD_LINUX && CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_HACHIDORI
+ # define AP_BATT_VOLT_PIN                  0
+ # define AP_BATT_CURR_PIN                  1
+ # define AP_BATT_VOLTDIVIDER_DEFAULT       1.0f
+ # define AP_BATT_CURR_AMP_PERVOLT_DEFAULT  1.0f
+
 #else
  # define AP_BATT_VOLT_PIN                  -1
  # define AP_BATT_CURR_PIN                  -1
