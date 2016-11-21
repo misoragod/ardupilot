@@ -31,6 +31,7 @@
 #include "AP_Baro_SITL.h"
 #include "AP_Baro_BMP085.h"
 #include "AP_Baro_BMP280.h"
+#include "AP_Baro_2SMPB02.h"
 #include "AP_Baro_HIL.h"
 #include "AP_Baro_MS5611.h"
 #include "AP_Baro_qflight.h"
@@ -458,6 +459,12 @@ void AP_Baro::init(void)
 #elif HAL_BARO_DEFAULT == HAL_BARO_BMP280_SPI
     ADD_BACKEND(AP_Baro_BMP280::probe(*this,
                                       std::move(hal.spi->get_device(HAL_BARO_BMP280_NAME))));
+#elif HAL_BARO_DEFAULT == HAL_BARO_2SMPB02_I2C
+    ADD_BACKEND(AP_Baro_2SMPB02::probe(*this,
+                                      std::move(hal.i2c_mgr->get_device(HAL_BARO_2SMPB02_BUS, HAL_BARO_2SMPB02_I2C_ADDR))));
+#elif HAL_BARO_DEFAULT == HAL_BARO_2SMPB02_SPI
+    ADD_BACKEND(AP_Baro_2SMPB02::probe(*this,
+                                      std::move(hal.spi->get_device(HAL_BARO_2SMPB02_NAME))));
 #elif HAL_BARO_DEFAULT == HAL_BARO_MS5611_I2C
     ADD_BACKEND(AP_Baro_MS56XX::probe(*this,
                                       std::move(hal.i2c_mgr->get_device(HAL_BARO_MS5611_I2C_BUS, HAL_BARO_MS5611_I2C_ADDR))));
