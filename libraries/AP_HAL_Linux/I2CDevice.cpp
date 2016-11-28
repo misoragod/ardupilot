@@ -393,7 +393,7 @@ void I2CDeviceManager::_unregister(I2CBus &b)
     }
 
     for (auto it = _buses.begin(); it != _buses.end(); it++) {
-        if ((*it)->bus == b.bus) {
+        if (*it && (*it)->bus == b.bus) {
             _buses.erase(it);
             delete &b;
             break;
