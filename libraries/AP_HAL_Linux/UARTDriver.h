@@ -11,6 +11,7 @@ namespace Linux {
 class UARTDriver : public AP_HAL::UARTDriver {
 public:
     UARTDriver(bool default_console);
+    ~UARTDriver();
 
     static UARTDriver *from(AP_HAL::UARTDriver *uart) {
         return static_cast<UARTDriver*>(uart);

@@ -41,6 +41,11 @@ UARTDriver::UARTDriver(bool default_console) :
     }
 }
 
+UARTDriver::~UARTDriver()
+{
+    _initialised = false;
+}
+
 /*
   set the tty device to use for this UART
  */
