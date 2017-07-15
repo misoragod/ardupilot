@@ -40,6 +40,8 @@ extern const AP_HAL::HAL& hal;
 #endif
 #endif
 
+#define DISABLE_MPU_FIFO 1
+
 #define debug(fmt, args ...)  do {printf("MPU: " fmt "\n", ## args); } while(0)
 
 /*
@@ -355,6 +357,8 @@ bool AP_InertialSensor_Invensense::_init()
 
 void AP_InertialSensor_Invensense::_fifo_reset()
 {
+#if DISABLE_MPU_FIFO
+#else
     uint8_t user_ctrl = _last_stat_user_ctrl;
     user_ctrl &= ~(BIT_USER_CTRL_FIFO_RESET | BIT_USER_CTRL_FIFO_EN);
     _dev->set_speed(AP_HAL::Device::SPEED_LOW);
@@ -367,9 +371,9 @@ void AP_InertialSensor_Invensense::_fifo_reset()
     hal.scheduler->delay_microseconds(1);
     _dev->set_speed(AP_HAL::Device::SPEED_HIGH);
     _last_stat_user_ctrl = user_ctrl | BIT_USER_CTRL_FIFO_EN;
-
     notify_accel_fifo_reset(_accel_instance);
     notify_gyro_fifo_reset(_gyro_instance);
+#endif
 }
 
 bool AP_InertialSensor_Invensense::_has_auxiliary_bus()
@@ -684,6 +688,10 @@ void AP_InertialSensor_Invensense::_read_fifo()
     uint8_t *rx = _fifo_buffer;
     bool need_reset = false;
 
+#if DISABLE_MPU_FIFO
+    n_samples = 1;
+    bytes_read = 0;
+#else
     if (!_block_read(MPUREG_FIFO_COUNTH, rx, 2)) {
         goto check_registers;
     }
@@ -707,9 +715,16 @@ void AP_InertialSensor_Invensense::_read_fifo()
         need_reset = true;
         n_samples = 24;
     }
+#endif
     
     while (n_samples > 0) {
         uint8_t n = MIN(n_samples, MPU_FIFO_BUFFER_LEN);
+#if DISABLE_MPU_FIFO
+        _dev->set_chip_select(true);
+        if (!_block_read(MPUREG_ACCEL_XOUT_H, rx, MPU_SAMPLE_SIZE)) {
+            goto check_registers;
+        }
+#else
         if (!_dev->set_chip_select(true)) {
             if (!_block_read(MPUREG_FIFO_R_W, rx, n * MPU_SAMPLE_SIZE)) {
                 goto check_registers;
@@ -729,6 +744,7 @@ void AP_InertialSensor_Invensense::_read_fifo()
             }
             _dev->set_chip_select(false);
         }
+#endif
 
         if (_fast_sampling) {
             if (!_accumulate_fast_sampling(rx, n)) {
@@ -806,6 +822,9 @@ void AP_InertialSensor_Invensense::_set_filter_register(void)
     config = 0;
 #endif
 
+#if DISABLE_MPU_FIFO
+    _fast_sampling = false;
+#else
     if (enable_fast_sampling(_accel_instance)) {
         _fast_sampling = (_mpu_type != Invensense_MPU6000 && _dev->bus_type() == AP_HAL::Device::BUS_TYPE_SPI);
         if (_fast_sampling) {
@@ -825,7 +844,8 @@ void AP_InertialSensor_Invensense::_set_filter_register(void)
             _register_write(MPUREG_I2C_SLV4_CTRL, 0x1F);
         }
     }
-    
+#endif
+
     if (_fast_sampling) {
         // this gives us 8kHz sampling on gyros and 4kHz on accels
         config |= BITS_DLPF_CFG_256HZ_NOLPF2;
