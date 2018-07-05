@@ -111,7 +111,7 @@ bool AP_Compass_AK09916::init()
     if (!dev->get_semaphore()->take(HAL_SEMAPHORE_BLOCK_FOREVER)) {
         return false;
     }
-
+/*
     if (bus_type == AK09916_ICM20948_I2C && dev_icm) {
         uint8_t rval;
         if (!dev_icm->read_registers(REG_ICM_WHOAMI, &rval, 1) ||
@@ -131,10 +131,11 @@ bool AP_Compass_AK09916::init()
         // enable i2c bypass
         dev_icm->write_register(REG_ICM_INT_PIN_CFG, 0x02);
     }
-
+*/
     uint16_t whoami;
     if (!dev->read_registers(REG_COMPANY_ID, (uint8_t *)&whoami, 2) ||
-        whoami != 0x0948) {
+//        whoami != 0x0948) {
+        whoami != 0x0c48) {
         // not a AK09916
         goto fail;
     }
