@@ -35,7 +35,7 @@ yatagarasu: all
 %-obc: EXTRAFLAGS += "-DOBC_FAILSAFE=ENABLED "
 
 # support debug build
-%-debug: OPTFLAGS = -g -O0
+%-debug: OPTFLAGS = -g -O2
 
 # support address sanitiser
 %-asan: OPTFLAGS = -g -O0 -fsanitize=address -fno-omit-frame-pointer
