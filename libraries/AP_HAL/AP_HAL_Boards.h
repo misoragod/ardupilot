@@ -107,6 +107,8 @@
 #define HAL_COMPASS_NAVIO              15
 #define HAL_COMPASS_AERO               16
 #define HAL_COMPASS_OCPOC_ZYNQ         17
+#define HAL_COMPASS_AK09916_I2C        18 
+#define HAL_COMPASS_LIS3MDL_I2C        19 
 
 /* Heat Types */
 #define HAL_LINUX_HEAT_PWM 1
