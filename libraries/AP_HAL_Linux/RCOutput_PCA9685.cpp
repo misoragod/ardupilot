@@ -198,7 +198,12 @@ void RCOutput_PCA9685::push()
         return;
 
     // Calculate the number of channels for this transfer.
+    // DB410C only could hanlde up to 32bytes
+#if CONFIG_HAL_BOARD_SUBTYPE == HAL_BOARD_SUBTYPE_LINUX_YATAGARASU
+    uint8_t max_ch = 4;
+#else
     uint8_t max_ch = (sizeof(unsigned) * 8) - __builtin_clz(_pending_write_mask);
+#endif 
     uint8_t min_ch = __builtin_ctz(_pending_write_mask);
 
     /*
